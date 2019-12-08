@@ -2,12 +2,15 @@ const {User, validate} = require('../models/users');
 const mongoose = require('mongoose');
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
 //   const customers = await Customer.find().sort('name');
 //   res.send(customers);
-    console.log('userget');
+    res.send('userget');
 });
 
 router.post('/', async (req, res) => {
@@ -29,7 +32,8 @@ router.post('/', async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
 
     await user.save();
-    res.send(user);
+    const token = user.generateAuthToken();
+    res.header('x-auth-token',token).send(user);
 });
 
 router.put('/:id', async (req, res) => {
