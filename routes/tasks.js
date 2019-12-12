@@ -1,6 +1,7 @@
 const { Task, validate } = require('../models/tasks');
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 /****** Assistive functions ******/
 const handleError = (err, res) => {
@@ -14,15 +15,25 @@ const handleSuccess = res => {
 };
 
 /****** ROUTES HANDLERS ******/
-router.get('/default', (req, res) => {
-  res.end();
+router.get('/', async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res
+      .status(200)
+      .set('Access-Control-Allow-Origin', '*')
+      .send(JSON.stringify(tasks));
+  } catch (err) {
+    console.log(err.message);
+    res.status(404).end();
+  }
+
+  res.status(200).end('<h1>dupa</h1>');
 });
 
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error);
 
-  console.log(req.body);
   const {
     descrShort,
     descrLong,
@@ -51,14 +62,36 @@ router.post('/', async (req, res) => {
     if (err) handleError(err, res);
     else handleSuccess(res);
   });
-
-  console.log(task);
 });
 
-router.put('/:id', async (req, res) => {});
+router.put('/:id', cors(), async (req, res) => {
+  try {
+    const id = req.params.id;
+    const element = await Task.findById(id);
+    if (!element) return;
+    element.set({ status: req.body.status });
+    const result = await element.save();
+    res.status(200).send(JSON.stringify(result));
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 
 router.delete('/:id', async (req, res) => {});
 
-router.get('/:id', async (req, res) => {});
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const task = await Task.findById(id);
+    console.log(task);
+    res
+      .status(200)
+      .set('Access-Control-Allow-Origin', '*')
+      .send(JSON.stringify(task));
+  } catch (err) {
+    console.log(err.message);
+    res.status(404).end();
+  }
+});
 
 module.exports = router;
