@@ -31,8 +31,14 @@ const taskSchema = new mongoose.Schema({
   },
   category: String,
   weight: String,
-  status: String,
-  creator: String,
+  status: {
+    type: Boolean,
+    default: false
+  },
+  creator: {
+    type: String,
+    default: null
+  },
   assigned: [String]
 });
 
@@ -51,8 +57,8 @@ const validate = task => {
     dateEnd: Joi.date().allow(''),
     category: Joi.string(),
     weight: Joi.string(),
-    status: Joi.string(),
-    creator: Joi.string(),
+    status: Joi.boolean(),
+    creator: Joi.alternatives().try(Joi.string(), null),
     assigned: Joi.alternatives().try(Joi.string(), Joi.array())
   };
 
