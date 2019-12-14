@@ -77,7 +77,16 @@ router.put('/:id', cors(), async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {});
+router.delete('/:id', cors(), async (req, res) => {
+  try {
+    const id = req.params.id;
+    const element = await Task.findByIdAndRemove({ _id: id });
+    if (!element) return;
+    res.status(200).send(JSON.stringify(element));
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 
 router.get('/:id', async (req, res) => {
   try {
