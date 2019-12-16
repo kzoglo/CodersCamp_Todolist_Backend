@@ -24,7 +24,7 @@ router.post('/', cors(), async (req, res) => {
         res
           .status(200)
           .set('Access-Control-Allow-Origin', '*')
-          .send({token: token, id: user.id});
+          .send({token: token, user: { id: user.id, name: user.name, surname: user.surname, email: user.email}});
       } catch (err) {
         console.log(err.message);
         res.status(404).send(err.message);
