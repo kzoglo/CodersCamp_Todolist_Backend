@@ -11,7 +11,7 @@ const handleError = (err, res) => {
 };
 
 const handleSuccess = res => {
-  res.status(200).send(`<h3>Document successfully saved!</h3>`);
+  res.status(200).send(`Document successfully saved!`);
 };
 
 /****** ROUTES HANDLERS ******/
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
   res.status(200).end('<h1>dupa</h1>');
 });
 
-router.post('/', async (req, res) => {
+router.post('/', cors(), async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error);
 
