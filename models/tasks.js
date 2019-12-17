@@ -39,7 +39,10 @@ const taskSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  assigned: [String]
+  project: {
+    set: v => setToNull(v),
+    type: String
+  }
 });
 
 const Task = mongoose.model('Task', taskSchema);
@@ -59,7 +62,7 @@ const validate = task => {
     weight: Joi.string(),
     status: Joi.boolean(),
     creator: Joi.alternatives().try(Joi.string(), null),
-    assigned: Joi.alternatives().try(Joi.string(), Joi.array())
+    project: Joi.string().allow('')
   };
 
   return Joi.validate(task, schema);

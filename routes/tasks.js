@@ -2,6 +2,7 @@ const { Task, validate } = require('../models/tasks');
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
+const auth = require('../middleware/auth');
 
 /****** Assistive functions ******/
 const handleError = (err, res) => {
@@ -11,13 +12,14 @@ const handleError = (err, res) => {
 };
 
 const handleSuccess = res => {
-  res.status(200).send(`Document successfully saved!`);
+  res.status(200).send(`Document saved!`);
 };
 
 /****** ROUTES HANDLERS ******/
-router.get('/', async (req, res) => {
+router.get('/:creator', auth, async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const creator = req.params.creator;
+    const tasks = await Task.find({ creator: creator });
     res
       .status(200)
       .set('Access-Control-Allow-Origin', '*')
@@ -30,7 +32,7 @@ router.get('/', async (req, res) => {
   res.status(200).end('<h1>dupa</h1>');
 });
 
-router.post('/', cors(), async (req, res) => {
+router.post('/', cors(), auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error);
 
@@ -42,7 +44,8 @@ router.post('/', cors(), async (req, res) => {
     category,
     weight,
     status,
-    assigned
+    project,
+    creator
   } = req.body;
 
   let task = new Task({
@@ -53,7 +56,8 @@ router.post('/', cors(), async (req, res) => {
     category,
     weight,
     status,
-    assigned
+    project,
+    creator
   });
 
   task = await task.save();
@@ -85,21 +89,6 @@ router.delete('/:id', cors(), async (req, res) => {
     res.status(200).send(JSON.stringify(element));
   } catch (err) {
     console.log(err.message);
-  }
-});
-
-router.get('/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    const task = await Task.findById(id);
-    console.log(task);
-    res
-      .status(200)
-      .set('Access-Control-Allow-Origin', '*')
-      .send(JSON.stringify(task));
-  } catch (err) {
-    console.log(err.message);
-    res.status(404).end();
   }
 });
 
