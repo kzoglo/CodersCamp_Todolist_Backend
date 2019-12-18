@@ -1,3 +1,4 @@
 {
-    "jwtPrivateKey": "cc4_jwtPrivateKey"
+    "jwtPrivateKey": "cc4_jwtPrivateKey",
+    "db": "cc4_db"
 }
