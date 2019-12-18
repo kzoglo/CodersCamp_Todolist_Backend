@@ -30,5 +30,7 @@ app.use('/api/tasks', tasks);
 app.use('/api/members', members);
 app.use('/api/auth', auth);
 
+require('./startup/prod');
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

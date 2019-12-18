@@ -27,8 +27,8 @@ const Project = mongoose.model(
       // required: true
     },
     deadline: {
-      type: Date,
-      default: Date.now
+      type: String,
+      default: Date.now.toString()
     },
     isActive: {
       type: Boolean,
@@ -43,12 +43,12 @@ function validateProject(project) {
       .min(3)
       .max(255)
       .required(),
-    id_task: Joi.array().items(Joi.number().min(1)), //.required()),
+    // id_task: Joi.array().items(Joi.number().min(1)), //.required()),
     owner: Joi.string()
       .min(1)
       .required(),
-    stage: Joi.string().valid('In progress', 'Finished'), //.required(),
-    deadline: Joi.date()
+    // stage: Joi.string().valid('In progress', 'Finished'), //.required(),
+    deadline: Joi.string()
   };
 
   return Joi.validate(project, schema);
