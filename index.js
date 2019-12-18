@@ -12,11 +12,12 @@ const app = express();
 // app.use(cors());
 
 if (!config.get('jwtPrivateKey')) {
-    console.log('ERROR - jwtPrivateKey: Klucz prywatny nie został ustawiony')
-    process.exit(1);
-} 
+  console.log('ERROR - jwtPrivateKey: Klucz prywatny nie został ustawiony');
+  process.exit(1);
+}
 
-mongoose.connect('mongodb://localhost/toDoList')
+mongoose
+  .connect('mongodb://localhost/toDoList')
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...'));
 
@@ -28,7 +29,6 @@ app.use('/api/projects', projects);
 app.use('/api/tasks', tasks);
 app.use('/api/members', members);
 app.use('/api/auth', auth);
-
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
