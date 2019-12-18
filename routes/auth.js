@@ -10,15 +10,15 @@ router.post('/', cors(), async (req, res) => {
     try {
         const { error } = validate(req.body);
         if ( error ) 
-            return res.status(400).send(error.details[0].message);
+            return res.status(400).send(JSON.stringify({msg:error.details[0].message}));
         
         let user = await User.findOne({email: req.body.email});
         if (!user) 
-            return res.status(400).send('Niepoprawny email lub hasło.');
+            return res.status(400).send(JSON.stringify({msg:'Niepoprawny email lub hasło.'}));
         
         const validPassword = await bcrypt.compare(req.body.password, user.password)
         if (!validPassword)
-            return res.status(400).send('Niepoprawny email lub hasło.');
+            return res.status(400).send(JSON.stringify({msg:'Niepoprawny email lub hasło.'}));
 
         const token = user.generateAuthToken();
         res
@@ -27,7 +27,7 @@ router.post('/', cors(), async (req, res) => {
           .send({token: token, user: { id: user.id, name: user.name, surname: user.surname, email: user.email}});
       } catch (err) {
         console.log(err.message);
-        res.status(404).send(err.message);
+        res.status(404).send(JSON.stringify({msg:err.message}));
       }
     
       res.status(200).end('wyświetlono');
