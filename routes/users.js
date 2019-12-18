@@ -39,13 +39,13 @@ router.get('/', async (req, res) => {
 router.post('/', cors(), async (req, res) => {
     try {
         console.log('add-user')
-        // const { error } = validate(req.body);
-        // if ( error ) 
-        //     return res.status(400).send('dfdfsdfdsdsfds');
+        const { error } = validate(req.body);
+        if ( error ) 
+            return res.status(400).send(JSON.stringify({msg:error.details[0].message}));
         
         let user = await User.findOne({email: req.body.email});
         if (user) 
-            return res.status(400).send('Użytkownik już istnieje.');
+            return res.status(400).send(JSON.stringify({msg: 'Użytkownik już istnieje.'}));
         
         user = new User ({
             name: req.body.name,
@@ -65,7 +65,7 @@ router.post('/', cors(), async (req, res) => {
           .send(JSON.stringify(user));
       } catch (err) {
         console.log(err.message);
-        res.status(404).end();
+        res.status(404).send(JSON.stringify({msg:error.details[0].message}));
       }
     
       res.status(200).end('dodano');
