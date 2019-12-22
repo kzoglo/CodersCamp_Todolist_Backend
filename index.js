@@ -8,8 +8,13 @@ const express = require('express');
 const config = require('config');
 const cors = require('cors');
 const app = express();
+const https = require('https');
+const fs = require('fs');
 
 // app.use(cors());
+
+const privateKey = fs.readFileSync('server.key');
+const cert = fs.readFileSync('server.cert');
 
 if (!config.get('jwtPrivateKey')) {
   console.log('ERROR - jwtPrivateKey: Klucz prywatny nie został ustawiony');
@@ -31,4 +36,6 @@ app.use('/api/members', members);
 app.use('/api/auth', auth);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+https
+  .createServer({ key: privateKey, cert: cert })
+  .listen(port, () => console.log(`Listening on port ${port}...`));

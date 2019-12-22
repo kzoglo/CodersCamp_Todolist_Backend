@@ -1,0 +1,27 @@
+.task-module {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  margin-bottom: 10px;
+  border: 2px solid purple;
+  box-shadow: 2p 2px 2px black;
+}
+
+.task-status,
+.task-description {
+  padding: 10px;
+}
+
+.task-module {
+  cursor: pointer;
+}
+
+.task-description {
+  background-color: #9e9e9e8f;
+}
+
+.modal-window {
+  position: absolute;
+  background-color: aquamarine;
+  z-index: 100;
+  top: 200px;
+}
