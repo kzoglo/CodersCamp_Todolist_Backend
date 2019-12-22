@@ -20,7 +20,7 @@ const port = process.env.PORT || 3000;
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-lowdw.mongodb.net/${process.env.MONGO_DEF_DB}?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-lowdw.mongodb.net/${process.env.MONGO_DEF_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
     app.listen(port, () => console.log(`Listening on port ${port}...`));
@@ -36,3 +36,4 @@ app.use('/api/projects', projects);
 app.use('/api/tasks', tasks);
 app.use('/api/members', members);
 app.use('/api/auth', auth);
+require('./startup/prod')(app);

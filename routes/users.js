@@ -38,10 +38,16 @@ router.post('/', cors(), async (req, res) => {
   try {
     console.log('add-user');
     const { error } = validate(req.body);
-    if (error) return res.status(400).send('Hasło musi mieć powyżej 5 znaków.');
+    if (error)
+      return res
+        .status(400)
+        .send(JSON.stringify({ msg: error.details[0].message }));
 
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send('Użytkownik już istnieje.');
+    if (user)
+      return res
+        .status(400)
+        .send(JSON.stringify({ msg: 'Użytkownik już istnieje.' }));
 
     user = new User({
       name: req.body.name,
@@ -61,36 +67,29 @@ router.post('/', cors(), async (req, res) => {
       .send(JSON.stringify(user));
   } catch (err) {
     console.log(err.message);
-    res.status(404).end();
+    res.status(404).send(JSON.stringify({ msg: error.details[0].message }));
   }
 
   res.status(200).end('dodano');
 });
 
-router.put('/:id', async (req, res) => {
-  //   const { error } = validate(req.body);
-  //   if (error) return res.status(400).send(error.details[0].message);
-  //   const customer = await Customer.findByIdAndUpdate(req.params.id,
-  //     {
-  //       name: req.body.name,
-  //       isGold: req.body.isGold,
-  //       phone: req.body.phone
-  //     }, { new: true });
-  //   if (!customer) return res.status(404).send('The customer with the given ID was not found.');
-  //   res.send(customer);
-});
-
 router.delete('/:id', async (req, res) => {
-  //   const customer = await Customer.findByIdAndRemove(req.params.id);
-  //   if (!customer) return res.status(404).send('The customer with the given ID was not found.');
-  //   res.send(customer);
+  try {
+    const users = await User.findByIdAndRemove(req.params.id);
+    if (!users) return res.status(404).send('Nie znaleziono usera o takim id.');
+    res
+      .status(200)
+      .set('Access-Control-Allow-Origin', '*')
+      .send(JSON.stringify(users));
+  } catch (err) {
+    console.log(err.message);
+    res.status(404).end();
+  }
+
+  res.status(200).end('usunieto');
 });
 
 router.get('/:id', async (req, res) => {
-  //   const customer = await Customer.findById(req.params.id);
-
-  //   if (!customer) return res.status(404).send('The customer with the given ID was not found.');
-
   try {
     const users = await User.findById(req.params.id);
     if (!users)
