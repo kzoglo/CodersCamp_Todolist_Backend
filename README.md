@@ -1,7 +1,4 @@
-# CC_toDoList_backend
-
-- możliwość odpalania aplikacji przez polecenie 'nodemon index.js'
-- set cc4_jwtPrivateKey=klaudiakeyehh [klucz należy przypisać w cmd (następnie tam odpalić serwer) nie przez VS Code.]
+# CodersCamp_Todolist_Backend
 
 ### Zabezpieczenie router :
 
