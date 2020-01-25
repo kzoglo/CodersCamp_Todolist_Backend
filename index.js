@@ -8,23 +8,27 @@ const express = require('express');
 const config = require('config');
 const cors = require('cors');
 const app = express();
-const https = require('https');
-const fs = require('fs');
-
-// app.use(cors());
-
-const privateKey = fs.readFileSync('server.key');
-const cert = fs.readFileSync('server.cert');
 
 if (!config.get('jwtPrivateKey')) {
   console.log('ERROR - jwtPrivateKey: Klucz prywatny nie został ustawiony');
   process.exit(1);
 }
 
+const port = process.env.PORT || 3000;
+
 mongoose
-  .connect('mongodb://localhost/toDoList')
-  .then(() => console.log('Connected to MongoDB...'))
-  .catch(err => console.error('Could not connect to MongoDB...'));
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-lowdw.mongodb.net/${process.env.MONGO_DEF_DB}?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+  )
+  .then(() => {
+    app.listen(port, () => console.log(`Listening on port ${port}...`));
+    console.log('Connected to MongoDB...');
+  })
+  .catch(err => console.error(err));
 
 app.options('*', cors());
 app.use(express.urlencoded({ extended: true }));
@@ -34,8 +38,4 @@ app.use('/api/projects', projects);
 app.use('/api/tasks', tasks);
 app.use('/api/members', members);
 app.use('/api/auth', auth);
-
-const port = process.env.PORT || 3000;
-https
-  .createServer({ key: privateKey, cert: cert })
-  .listen(port, () => console.log(`Listening on port ${port}...`));
+require('./startup/prod')(app);

@@ -14,7 +14,7 @@ router.get('/:owner', cors(), async (req, res) => {
   res.status(200).send(selectOne);
 });
 
-router.get('/:owner/:id', async (req, res) => {
+router.get('/:owner/:id', cors(), async (req, res) => {
   const select = await Project.find({
     _id: req.params.id,
     owner: req.params.owner
@@ -25,7 +25,7 @@ router.get('/:owner/:id', async (req, res) => {
 });
 
 // INSERT
-router.post('/', async (req, res) => {
+router.post('/', cors(), async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE
-router.put('/:id', async (req, res) => {
+router.put('/:id', cors(), async (req, res) => {
   const project = await Project.findByIdAndUpdate(
     req.params.id,
     {
@@ -58,13 +58,14 @@ router.put('/:id', async (req, res) => {
     { new: true }
   );
 
-  res.status(200).send(project);
+  const result = await insert.save();
+  // console.log('RESULT -----------', result)
 
-  console.log(project);
+  if (result) return res.status(200).send(result);
 });
 
 // DELETE
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', cors(), async (req, res) => {
   res
     .status(501)
     .send('Delete request is not implemented. Use Put instead. - 501');

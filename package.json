@@ -1,21 +1,17 @@
 {
-  "name": "cc_todolist_backend",
+  "name": "CodersCamp_Todolist_Backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": "10.16.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/goraklaudia/CC_toDoList_backend.git"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "coders",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/goraklaudia/CC_toDoList_backend/issues"
-  },
-  "homepage": "https://github.com/goraklaudia/CC_toDoList_backend#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
