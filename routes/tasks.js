@@ -28,8 +28,6 @@ router.get('/:creator', auth, async (req, res) => {
     console.log(err.message);
     res.status(404).end();
   }
-
-  res.status(200).end('<h1>dupa</h1>');
 });
 
 router.post('/', cors(), auth, async (req, res) => {

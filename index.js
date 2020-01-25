@@ -9,8 +9,6 @@ const config = require('config');
 const cors = require('cors');
 const app = express();
 
-// app.use(cors());
-
 if (!config.get('jwtPrivateKey')) {
   console.log('ERROR - jwtPrivateKey: Klucz prywatny nie został ustawiony');
   process.exit(1);
@@ -20,7 +18,11 @@ const port = process.env.PORT || 3000;
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-lowdw.mongodb.net/${process.env.MONGO_DEF_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true }
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-lowdw.mongodb.net/${process.env.MONGO_DEF_DB}?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
   )
   .then(() => {
     app.listen(port, () => console.log(`Listening on port ${port}...`));
