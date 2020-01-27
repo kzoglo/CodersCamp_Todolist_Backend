@@ -58,7 +58,7 @@ router.put('/:id', cors(), async (req, res) => {
     { new: true }
   );
 
-  const result = await insert.save();
+  const result = await project.save();
   // console.log('RESULT -----------', result)
 
   if (result) return res.status(200).send(result);

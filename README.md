@@ -1,9 +1,10 @@
-# CodersCamp_Todolist_Backend
+# CodersCamp_Todolist_Backend:
 
-### Zabezpieczenie router :
+Backend application, which was deployed on heroku. Made for CodersCamp_Todolist_Frontend client application. Project has been made for a Coders Camp course.
 
-    - const auth = require('../middleware/auth'); - zaimportować middleware
-    - router.post('/', **auth**, async (req, res) => {}) - następnie dodać auth do requesta który wymaga dostępu
+- users - Klaudia Gora,
+- projects - Michał Skorzec,
+- tasks, deploy - Kamil Żogło
 
 ### Wytyczne:
 
